@@ -17,7 +17,7 @@ import java.util.UUID;
  * Created by julina on 9/25/14.
  */
 public class UserDao {
-    private String tableName= "testuser";
+    private String tableName= "testuser1";
 
     private MySql mySql = null;
     private MySqlQuery mySqlQuery = null;

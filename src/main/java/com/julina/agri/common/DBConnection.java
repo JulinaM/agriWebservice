@@ -16,7 +16,7 @@ public class DBConnection {
         MySqlConnection mySqlConnection = new MySqlConnection();
         mySqlConnection.setDatabaseName("agri");
         mySqlConnection.setUsername("root");
-        mySqlConnection.setPassword("julina1");
+        mySqlConnection.setPassword("julina12");
         mySqlConnection.setUrl("jdbc:mysql://localhost:3306/");
         mySqlConnection.setDriver("com.mysql.jdbc.Driver");
 

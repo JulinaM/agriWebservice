@@ -72,18 +72,16 @@ public class CropDao {
         return null;
     }
 
-    @Deprecated
     public ArrayList<CropPojo> getCrops() throws SQLException,
             RmodelException.SqlException,
             AgriException.NullPointerException {
 
 
-        String query = "SELECT  locationId, locationName FROM %s ";
+        String query = "SELECT  cropId, cropName FROM %s ";
         query = String.format(query, tableName);
         mySqlQuery.setQuery(query);
 
         PreparedStatement preparedStatement = null;
-        UserPojo userPojo1 = new UserPojo();
         try {
             mySqlQuery.InitPreparedStatement();
             preparedStatement = mySqlQuery.getPreparedStatement();
@@ -92,8 +90,8 @@ public class CropDao {
             ArrayList<CropPojo> cropPojos = new ArrayList<>(resultSet.getRow());
             while (resultSet.next()){
                 CropPojo cropPojo = new CropPojo();
-                cropPojo.setCropId(resultSet.getInt("locationId"));
-                cropPojo.setCropName(resultSet.getString("locationName"));
+                cropPojo.setCropId(resultSet.getInt("cropId"));
+                cropPojo.setCropName(resultSet.getString("cropName"));
                 cropPojos.add(cropPojo);
             }
             return cropPojos;

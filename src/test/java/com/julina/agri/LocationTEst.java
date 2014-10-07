@@ -16,7 +16,7 @@ public class LocationTEst {
     private LocationDao locationDao = null;
 
     @Test
-    public void insertTest() throws SQLException, AgriException.NullPointerException, RmodelException.SqlException, RmodelException.CommonException {
+    public void getTest() throws SQLException, AgriException.NullPointerException, RmodelException.SqlException, RmodelException.CommonException {
         locationDao = new LocationDao();
         ArrayList<LocationPojo> locationPojos = locationDao.getLocations();
         System.out.println(locationPojos.get(0).getLocationId() +" " +locationPojos.get(0).getLocationName());

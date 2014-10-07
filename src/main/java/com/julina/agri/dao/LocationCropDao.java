@@ -4,7 +4,9 @@ import com.julina.agri.common.AgriException;
 import com.julina.agri.common.DBConnection;
 import com.julina.agri.pojo.CropPojo;
 import com.julina.agri.pojo.LocationPojo;
+import com.julina.agri.pojo.LocationsCropPojo;
 import com.julina.agri.pojo.UserPojo;
+import com.julina.agri.resource.Crop;
 import com.tektak.iloop.rmodel.RmodelException;
 import com.tektak.iloop.rmodel.driver.MySql;
 import com.tektak.iloop.rmodel.query.MySqlQuery;
@@ -33,32 +35,33 @@ public class LocationCropDao {
         mySqlQuery.setSql(this.mySql);
     }
 
-    public  ArrayList<CropPojo> getCropsForGivenLocation(int locationId) throws SQLException,
+    public  ArrayList<LocationsCropPojo> getCropsForGivenLocation(int locationId) throws SQLException,
             RmodelException.SqlException,
             AgriException.NullPointerException {
 
 
-        String query = "SELECT  C.cropId, C.cropName FROM crop as C JOIN locationCrops as LC " +
+        String query = "SELECT  C.cropId, C.cropName, LC.tag FROM crop as C JOIN locationsCrop as LC " +
                 "ON C.cropId = LC.cropId WHERE LC.locationId = ? ";
-        query = String.format(query, tableName);
         mySqlQuery.setQuery(query);
 
         PreparedStatement preparedStatement = null;
-        UserPojo userPojo1 = new UserPojo();
         try {
             mySqlQuery.InitPreparedStatement();
             preparedStatement = mySqlQuery.getPreparedStatement();
             preparedStatement.setInt(1, locationId);
             ResultSet resultSet = mySqlQuery.Drl();
             resultSet.beforeFirst();
-            ArrayList<CropPojo> cropPojos = new ArrayList<>(resultSet.getRow());
+            ArrayList<LocationsCropPojo> locationsCrop = new ArrayList<>(resultSet.getRow());
             while (resultSet.next()){
+                LocationsCropPojo locationsCropPojo = new LocationsCropPojo();
                 CropPojo cropPojo = new CropPojo();
                 cropPojo.setCropId(resultSet.getInt("cropId"));
                 cropPojo.setCropName(resultSet.getString("cropName"));
-                cropPojos.add(cropPojo);
+                locationsCropPojo.setCropId(cropPojo);
+                locationsCropPojo.setTag(resultSet.getString("tag"));
+                locationsCrop.add(locationsCropPojo);
             }
-            return cropPojos;
+            return locationsCrop;
         } catch (RmodelException.SqlException e) {
             e.printStackTrace();
         } catch (RmodelException.CommonException e) {
