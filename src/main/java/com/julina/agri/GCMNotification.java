@@ -5,8 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +19,7 @@ import com.google.android.gcm.server.Sender;
  * Created by julina on 10/6/14.
  */
 
-@WebServlet("/GCMNotification")
+//@WebServlet("/a/GCMNotification")
 public class GCMNotification extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -32,7 +32,10 @@ public class GCMNotification extends HttpServlet {
 
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+        String address=request.getContextPath()+"/index.jsp";
+        System.out.println("we are here :  "+address);
+        RequestDispatcher dispatcher=request.getRequestDispatcher(address);
+        dispatcher.forward(request, response);
 
     }
 
