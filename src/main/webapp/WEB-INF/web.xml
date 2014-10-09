@@ -51,7 +51,7 @@
 
     <filter-mapping>
         <filter-name>Agri Filter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/ws/*</url-pattern>
     </filter-mapping>
 
 

@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class ResponseJson {
     public final static String ERROR_CODE = "errorCode";
-    public final static String ERROR_MESSAGE = "errorMessage";
+    public final static String MESSAGE = "message";
     public final static String ERROR = "error";
     public final static String TIMESTAMP = "timestamp";
     public final static String BODY = "body";
@@ -19,7 +19,7 @@ public class ResponseJson {
         responseJson.put(ResponseJson.ERROR, true);
         responseJson.put(ResponseJson.ERROR_CODE, 0);
         responseJson.put(ResponseJson.TIMESTAMP, new Date().getTime());
-        responseJson.put(ResponseJson.ERROR_MESSAGE, JSONObject.NULL);
+        responseJson.put(ResponseJson.MESSAGE, JSONObject.NULL);
         responseJson.put(ResponseJson.BODY, JSONObject.NULL);
         return responseJson;
     }

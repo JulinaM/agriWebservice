@@ -22,4 +22,6 @@ public class SubscriberPojo {
     public void setTag(String tag) {
         this.tag = tag;
     }
+
+
 }

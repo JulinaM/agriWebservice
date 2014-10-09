@@ -5,7 +5,6 @@ import com.julina.agri.common.DBConnection;
 import com.julina.agri.common.ErrorMessages;
 import com.julina.agri.pojo.CropPojo;
 import com.julina.agri.pojo.LocationPojo;
-import com.julina.agri.pojo.UserPojo;
 import com.tektak.iloop.rmodel.RmodelException;
 import com.tektak.iloop.rmodel.driver.MySql;
 import com.tektak.iloop.rmodel.query.MySqlQuery;

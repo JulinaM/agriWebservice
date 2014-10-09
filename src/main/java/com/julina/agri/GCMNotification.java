@@ -1,19 +1,15 @@
 package com.julina.agri;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.google.android.gcm.server.Message;
+import com.google.android.gcm.server.Result;
+import com.google.android.gcm.server.Sender;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.android.gcm.server.Message;
-import com.google.android.gcm.server.Result;
-import com.google.android.gcm.server.Sender;
+import java.io.IOException;
 
 /**
  * Created by julina on 10/6/14.
@@ -24,7 +20,7 @@ public class GCMNotification extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // Put your Google API Server Key here
-    private static final String GOOGLE_SERVER_KEY = "AIzaSyAQV1G-C5ocOqlUTaiuDXI8rsbokFoxLVA";
+    private static final String GOOGLE_SERVER_KEY = "AIzaSyAPxdy3kTeYeQQAo82saLCA1_k6WJriILc";
 
     public GCMNotification() {
         super();
@@ -49,19 +45,21 @@ public class GCMNotification extends HttpServlet {
         // GCM RedgId of Android device to send push notification
         String regId = "";
         if (share != null && !share.isEmpty()) {
-            regId = request.getParameter("regId");
-            PrintWriter writer = new PrintWriter("GCMRegId.txt");
+            regId = request.getParameter("shareRegId");
+            /*PrintWriter writer = new PrintWriter("GCMRegId.txt");
             writer.println(regId);
-            writer.close();
+            writer.close();*/
             request.setAttribute("pushStatus", "GCM RegId Received.");
             request.getRequestDispatcher("index.jsp")
                     .forward(request, response);
         } else {
             try {
-                BufferedReader br = new BufferedReader(new FileReader(
+               /* BufferedReader br = new BufferedReader(new FileReader(
                         "GCMRegId.txt"));
                 regId = br.readLine();
-                br.close();
+                br.close();*/
+                // nitu's regId = " APA91bER77dK6t1oS7bXSLnuaGEKjqMCHMUqiOUPSJW1tBC_MYgWzyezGCZj2HE6UgTyGn2S__Ev12dK2f6JLnLiqX1NDJCz-zd0Fbg4Mb_KTBI4e8F2z1sne6WX0Wn35DUMvrC1uMEepDbf70NrHdMr_h-fLp-vvQ";
+                regId = " APA91bGDXZuPw-kafXcE1QwDQPrVhd6bGk1wIaM60zUsC9pS1lLcZCh_VV9B-OeBFdYeWfeGFJ0R5MYZ7fvfTVURymiaJ4A0khMZ2ARMsPraRWSBrt9eWoHmTTRTAUUyyf0V60kSeGVP";
                 String userMessage = request.getParameter("message");
                 Sender sender = new Sender(GOOGLE_SERVER_KEY);
                 Message message = new Message.Builder().timeToLive(30)

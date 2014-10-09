@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by julina on 10/6/14.
  */
-@Path("location")
+@Path("ws/location")
 public class Location {
     @Path("pull")
     @GET
@@ -36,24 +36,24 @@ public class Location {
             }
             responseJson.put(ResponseJson.ERROR, false);
             responseJson.put(ResponseJson.ERROR_CODE, 200);
-            responseJson.put(ResponseJson.ERROR_MESSAGE, "success");
+            responseJson.put(ResponseJson.MESSAGE, "success");
             responseJson.put(ResponseJson.BODY, jsonArray);
             return Response.ok().entity(responseJson.toString()).build();
         } catch (SQLException e) {
             responseJson.put(ResponseJson.ERROR_CODE, ErrorMessages.INTERNAL_SERVER_ERROR.getValue());
-            responseJson.put(ResponseJson.ERROR_MESSAGE, e.getMessage());
+            responseJson.put(ResponseJson.MESSAGE, e.getMessage());
             return Response.ok().entity(responseJson.toString()).build();
         } catch (RmodelException.SqlException e) {
             responseJson.put(ResponseJson.ERROR_CODE, ErrorMessages.INTERNAL_SERVER_ERROR.getValue());
-            responseJson.put(ResponseJson.ERROR_MESSAGE, e.getMessage());
+            responseJson.put(ResponseJson.MESSAGE, e.getMessage());
             return Response.ok().entity(responseJson.toString()).build();
         } catch (RmodelException.CommonException e) {
             responseJson.put(ResponseJson.ERROR_CODE, ErrorMessages.INTERNAL_SERVER_ERROR.getValue());
-            responseJson.put(ResponseJson.ERROR_MESSAGE, e.getMessage());
+            responseJson.put(ResponseJson.MESSAGE, e.getMessage());
             return Response.ok().entity(responseJson.toString()).build();
         } catch (AgriException.NullPointerException e) {
             responseJson.put(ResponseJson.ERROR_CODE, ErrorMessages.INTERNAL_SERVER_ERROR.getValue());
-            responseJson.put(ResponseJson.ERROR_MESSAGE, e.getMessage());
+            responseJson.put(ResponseJson.MESSAGE, e.getMessage());
             return Response.ok().entity(responseJson.toString()).build();
         }
     }

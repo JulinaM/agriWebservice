@@ -4,8 +4,6 @@ import com.tektak.iloop.rmodel.RmodelException;
 import com.tektak.iloop.rmodel.connection.MySqlConnection;
 import com.tektak.iloop.rmodel.driver.MySql;
 
-import java.net.URL;
-
 /**
  * Created by julina on 7/4/14.
  */

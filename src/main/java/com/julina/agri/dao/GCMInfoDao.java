@@ -2,27 +2,24 @@ package com.julina.agri.dao;
 
 import com.julina.agri.common.AgriException;
 import com.julina.agri.common.DBConnection;
-import com.julina.agri.common.ErrorMessages;
 import com.tektak.iloop.rmodel.RmodelException;
 import com.tektak.iloop.rmodel.driver.MySql;
 import com.tektak.iloop.rmodel.query.MySqlQuery;
-import org.json.JSONArray;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Created by julina on 10/7/14.
+ * Created by julina on 10/8/14.
  */
-public class SubscriberDao {
-
-    private String tableName= "subsriber";
+public class GCMInfoDao {
+    private String tableName= "GCMInfo";
 
     private MySql mySql = null;
     private MySqlQuery mySqlQuery = null;
 
 
-    public SubscriberDao() throws
+    public GCMInfoDao() throws
             RmodelException.SqlException,
             RmodelException.CommonException {
 
@@ -31,17 +28,17 @@ public class SubscriberDao {
         mySqlQuery.setSql(this.mySql);
     }
 
-
-    public int[] insert(String deviceId,int locationId, JSONArray tags) throws
-            AgriException.NullPointerException, SQLException, RmodelException.SqlException {
+    public int registerGCM(String deviceId, String regId) throws
+            SQLException, RmodelException.SqlException,
+            AgriException.NullPointerException {
 
         if(deviceId == null)
-            throw new AgriException.NullPointerException(ErrorMessages.NULL_USER_ID.toString());
+            throw new AgriException.NullPointerException("deviceId null");
+        if(regId == null)
+            throw new AgriException.NullPointerException("regId null");
 
-        if(tags == null || tags.length() == 0)
-            throw new AgriException.NullPointerException(ErrorMessages.NULL_USER_ID.toString());
 
-        String query = "INSERT INTO %s (deviceId, tag) VALUE(?,?)";
+        String query = "INSERT INTO %s (deviceId, regId) VALUE(?,?)";
         query = String.format(query, tableName);
         mySqlQuery.setQuery(query);
 
@@ -49,14 +46,9 @@ public class SubscriberDao {
         try {
             mySqlQuery.InitPreparedStatement();
             preparedStatement = mySqlQuery.getPreparedStatement();
-            int length = tags.length();
-            for (int i = 0; i < length; i++) {
-                preparedStatement.setString(1, deviceId);
-                preparedStatement.setString(2, tags.getString(i));
-                preparedStatement.addBatch();
-            }
-
-            return preparedStatement.executeBatch();
+            preparedStatement.setString(1, deviceId);
+            preparedStatement.setString(2, regId);
+            return mySqlQuery.Dml();
         } catch (RmodelException.SqlException e) {
             e.printStackTrace();
         } catch (RmodelException.CommonException e) {
@@ -70,7 +62,8 @@ public class SubscriberDao {
             if(mySqlQuery != null)
                 mySqlQuery.Close();
         }
-        return null;
+        return 0;
     }
+
 
 }

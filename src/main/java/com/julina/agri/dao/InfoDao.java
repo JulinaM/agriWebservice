@@ -3,8 +3,7 @@ package com.julina.agri.dao;
 import com.julina.agri.common.AgriException;
 import com.julina.agri.common.DBConnection;
 import com.julina.agri.common.ErrorMessages;
-import com.julina.agri.pojo.LocationPojo;
-import com.julina.agri.pojo.UserPojo;
+import com.julina.agri.pojo.InfoPojo;
 import com.tektak.iloop.rmodel.RmodelException;
 import com.tektak.iloop.rmodel.driver.MySql;
 import com.tektak.iloop.rmodel.query.MySqlQuery;
@@ -12,20 +11,18 @@ import com.tektak.iloop.rmodel.query.MySqlQuery;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.UUID;
 
 /**
- * Created by julina on 10/6/14.
+ * Created by julina on 10/9/14.
  */
-public class LocationDao {
-    private String tableName= "location";
+public class InfoDao {
+    private String tableName= "info";
 
     private MySql mySql = null;
     private MySqlQuery mySqlQuery = null;
 
 
-    public LocationDao() throws
+    public InfoDao() throws
             RmodelException.SqlException,
             RmodelException.CommonException {
 
@@ -34,67 +31,64 @@ public class LocationDao {
         mySqlQuery.setSql(this.mySql);
     }
 
-    @Deprecated
-    public String insert(LocationPojo locationPojo) throws
-            AgriException.NullPointerException, SQLException, RmodelException.SqlException {
-
-        if(locationPojo == null)
-            throw new AgriException.NullPointerException(ErrorMessages.NULL_USER_ID.toString());
-
-        String userId = UUID.randomUUID().toString().substring(0,10);
-
-        String query = "INSERT INTO %s (locationId, locationName) VALUE(?,?)";
-        query = String.format(query, tableName);
-        mySqlQuery.setQuery(query);
-
-        PreparedStatement preparedStatement = null;
-        try {
-            mySqlQuery.InitPreparedStatement();
-            preparedStatement = mySqlQuery.getPreparedStatement();
-            preparedStatement.setInt(1, locationPojo.getLocationId());
-            preparedStatement.setString(2, locationPojo.getLocationName());
-            mySqlQuery.Dml();
-            return userId;
-        } catch (RmodelException.SqlException e) {
-            e.printStackTrace();
-        } catch (RmodelException.CommonException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        finally {
-            if(preparedStatement != null)
-                preparedStatement.close();
-            if(mySqlQuery != null)
-                mySqlQuery.Close();
-        }
-        return null;
-    }
-
-    public ArrayList<LocationPojo> getLocations() throws SQLException,
+    public int insert(InfoPojo infoPojo) throws SQLException,
             RmodelException.SqlException,
             AgriException.NullPointerException {
 
-
-        String query = "SELECT  locationId, locationName FROM %s ";
+        if(infoPojo == null)
+            throw new AgriException.NullPointerException(ErrorMessages.NULL_USER_ID.toString());
+        String query = "INSERT INTO %s (infoId, infoTitle, infoFrom, infoData) value (?,?,?,?)";
         query = String.format(query, tableName);
         mySqlQuery.setQuery(query);
 
         PreparedStatement preparedStatement = null;
-        UserPojo userPojo1 = new UserPojo();
         try {
             mySqlQuery.InitPreparedStatement();
             preparedStatement = mySqlQuery.getPreparedStatement();
+            preparedStatement.setInt(1, infoPojo.getInfoId());
+            preparedStatement.setString(2, infoPojo.getInfoTitle());
+            preparedStatement.setString(3, infoPojo.getInfoFrom());
+            preparedStatement.setString(4, infoPojo.getInfoData());
+            //preparedStatement.setLong(5, infoPojo.getTimestamp());
+            return mySqlQuery.Dml();
+        } catch (RmodelException.SqlException e) {
+            e.printStackTrace();
+        } catch (RmodelException.CommonException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if(preparedStatement != null)
+                preparedStatement.close();
+            if(mySqlQuery != null)
+                mySqlQuery.Close();
+        }
+        return 0;
+    }
+
+    public String[] getRegId(String tag) throws AgriException.DataModelException, SQLException, RmodelException.SqlException {
+        if(tag == null)
+            throw new AgriException.DataModelException(ErrorMessages.NULL_REQUEST.toString());
+        String query = "SELECT GI.regId from subsriber as S JOIN GCMInfo as GI on S.deviceId = GI.deviceId WHERE S.tag = ?";
+        query = String.format(query, tableName);
+        mySqlQuery.setQuery(query);
+
+        PreparedStatement preparedStatement = null;
+        try{
+            mySqlQuery.InitPreparedStatement();
+            preparedStatement = mySqlQuery.getPreparedStatement();
+            preparedStatement.setString(1, tag);
             ResultSet resultSet = mySqlQuery.Drl();
+            resultSet.last();
+            int length = resultSet.getRow();
+            String[] regIds = new String[length];
             resultSet.beforeFirst();
-            ArrayList<LocationPojo> locationPojos = new ArrayList<>(resultSet.getRow());
-            while (resultSet.next()){
-                LocationPojo locationPojo = new LocationPojo();
-                locationPojo.setLocationId(resultSet.getInt("locationId"));
-                locationPojo.setLocationName(resultSet.getString("locationName"));
-                locationPojos.add(locationPojo);
+            int i = 0;
+            while (resultSet.next()) {
+                regIds[i++] = resultSet.getString("regId");
             }
-            return locationPojos;
+            return regIds;
         } catch (RmodelException.SqlException e) {
             e.printStackTrace();
         } catch (RmodelException.CommonException e) {
@@ -109,5 +103,6 @@ public class LocationDao {
                 mySqlQuery.Close();
         }
         return null;
+
     }
 }

@@ -10,7 +10,9 @@ public enum ErrorMessages {
     NULL_USER_ID(4),
     INTERNAL_SERVER_ERROR(5),
     CONNECTION_ERROR(6),
-    INVALID_EMAIL(7);
+    INVALID_EMAIL(7),
+    INVALID_DEVICE_ID(8),
+    ;
 
     private int value;
     private ErrorMessages (int value){
