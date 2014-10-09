@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by julina on 10/9/14.
@@ -37,5 +38,14 @@ public class InfoDaoTest {
         //int result = infoDao.insert(infoPojo);
         //Assert.assertTrue(result == 1);
 
+    }
+
+    @Test
+    public void getCropDetail() throws AgriException.NullPointerException, SQLException, RmodelException.SqlException, RmodelException.CommonException {
+        infoDao = new InfoDao();
+        ArrayList<InfoPojo> infoPojos = infoDao.getCropDetail(1);
+        for (InfoPojo info : infoPojos){
+            System.out.println(info.getInfoId()+" "+info.getInfoFrom()+" "+info.getInfoTitle()+" "+info.getInfoData()+" "+info.getTimestamp());
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.julina.agri.dao;
 import com.julina.agri.common.AgriException;
 import com.julina.agri.common.DBConnection;
 import com.julina.agri.common.ErrorMessages;
+import com.julina.agri.pojo.CropPojo;
 import com.julina.agri.pojo.InfoPojo;
 import com.tektak.iloop.rmodel.RmodelException;
 import com.tektak.iloop.rmodel.driver.MySql;
@@ -11,6 +12,8 @@ import com.tektak.iloop.rmodel.query.MySqlQuery;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by julina on 10/9/14.
@@ -70,7 +73,7 @@ public class InfoDao {
     public String[] getRegId(String tag) throws AgriException.DataModelException, SQLException, RmodelException.SqlException {
         if(tag == null)
             throw new AgriException.DataModelException(ErrorMessages.NULL_REQUEST.toString());
-        String query = "SELECT GI.regId from subsriber as S JOIN GCMInfo as GI on S.deviceId = GI.deviceId WHERE S.tag = ?";
+        String query = "SELECT GI.regId from subscriber as S JOIN GCMInfo as GI on S.deviceId = GI.deviceId WHERE S.tag = ?";
         query = String.format(query, tableName);
         mySqlQuery.setQuery(query);
 
@@ -104,5 +107,48 @@ public class InfoDao {
         }
         return null;
 
+    }
+
+    public ArrayList<InfoPojo> getCropDetail(int cropId) throws SQLException,
+            RmodelException.SqlException,
+            AgriException.NullPointerException {
+
+
+        String query = " select * from info as i join infoClient as ic join locationsCrop as lc on lc.tag=ic.tag AND ic.infoId=i.infoId WHERE lc.cropId = ?";
+        query = String.format(query, tableName);
+        mySqlQuery.setQuery(query);
+
+        PreparedStatement preparedStatement = null;
+        try {
+            mySqlQuery.InitPreparedStatement();
+            preparedStatement = mySqlQuery.getPreparedStatement();
+            preparedStatement.setInt(1, cropId);
+            ResultSet resultSet = mySqlQuery.Drl();
+            resultSet.beforeFirst();
+            ArrayList<InfoPojo> infos = new ArrayList<>(resultSet.getRow());
+            while (resultSet.next()){
+               InfoPojo infoPojo = new InfoPojo();
+                infoPojo.setInfoTitle(resultSet.getString("infoTitle"));
+                infoPojo.setInfoData(resultSet.getString("infoData"));
+                infoPojo.setInfoFrom(resultSet.getString("infoFrom"));
+                infoPojo.setTimestamp(resultSet.getDate("timestamp").getTime());
+                infoPojo.setInfoId(resultSet.getInt("infoId"));
+                infos.add(infoPojo);
+            }
+            return infos;
+        } catch (RmodelException.SqlException e) {
+            e.printStackTrace();
+        } catch (RmodelException.CommonException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if(preparedStatement != null)
+                preparedStatement.close();
+            if(mySqlQuery != null)
+                mySqlQuery.Close();
+        }
+        return null;
     }
 }

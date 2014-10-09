@@ -16,7 +16,7 @@ import java.sql.SQLException;
  */
 public class SubscriberDao {
 
-    private String tableName= "subsriber";
+    private String tableName= "subscriber";
 
     private MySql mySql = null;
     private MySqlQuery mySqlQuery = null;

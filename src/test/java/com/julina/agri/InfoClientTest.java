@@ -19,4 +19,5 @@ public class InfoClientTest {
         int result = infoClientDao.insert(5,"6-1");
         Assert.assertTrue(result == 1);
     }
+
 }

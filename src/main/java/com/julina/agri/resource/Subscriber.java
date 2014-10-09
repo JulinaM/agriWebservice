@@ -26,7 +26,7 @@ public class Subscriber {
             JSONObject requestJson = new JSONObject(jsonString);
             int locationId = requestJson.getInt("locationId");
             String deviceId = requestJson.getString("deviceId");
-            JSONArray jsonArray = requestJson.getJSONArray("cropsIds");
+            JSONArray jsonArray = requestJson.getJSONArray("tags");
             SubscriberDao subscriberDao = new SubscriberDao();
             subscriberDao.insert(deviceId, locationId, jsonArray);
 
