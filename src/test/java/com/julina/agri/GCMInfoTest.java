@@ -16,6 +16,6 @@ public class GCMInfoTest {
     @Test
     public void insertTest() throws AgriException.NullPointerException, SQLException, RmodelException.SqlException, RmodelException.CommonException {
         gcmInfoDao = new GCMInfoDao();
-        gcmInfoDao.registerGCM("dev1", "reg12");
+        gcmInfoDao.registerGCM("myDev", "reg12");
     }
 }

@@ -36,27 +36,29 @@ public class GCMInfo {
         String regId = requestJson.getString("regId");
         try {
             GCMInfoDao gcmInfoDao = new GCMInfoDao();
-            gcmInfoDao.registerGCM(deviceId, regId);
-            responseJson.put(ResponseJson.ERROR, false);
-            responseJson.put(ResponseJson.ERROR_CODE, 200);
-            responseJson.put(ResponseJson.MESSAGE, "success");
-            return Response.ok().entity(responseJson.toString()).build();
+            int result = gcmInfoDao.registerGCM(deviceId, regId);
+            if(result == 1) {
+                responseJson.put(ResponseJson.ERROR, false);
+                responseJson.put(ResponseJson.ERROR_CODE, 200);
+                responseJson.put(ResponseJson.MESSAGE, "success");
+            }
+            else {
+                responseJson.put(ResponseJson.ERROR_CODE, ErrorMessages.DB_INSERTION_FAILURE.getValue());
+                responseJson.put(ResponseJson.MESSAGE, ErrorMessages.DB_INSERTION_FAILURE);
+            }
         } catch (SQLException e ) {
             responseJson.put(ResponseJson.ERROR_CODE, ErrorMessages.INTERNAL_SERVER_ERROR.getValue());
             responseJson.put(ResponseJson.MESSAGE, e.getMessage());
-            return Response.ok().entity(responseJson.toString()).build();
         } catch (RmodelException.SqlException e) {
             responseJson.put(ResponseJson.ERROR_CODE, ErrorMessages.INTERNAL_SERVER_ERROR.getValue());
             responseJson.put(ResponseJson.MESSAGE, e.getMessage());
-            return Response.ok().entity(responseJson.toString()).build();
         } catch (RmodelException.CommonException e) {
             responseJson.put(ResponseJson.ERROR_CODE, ErrorMessages.INTERNAL_SERVER_ERROR.getValue());
             responseJson.put(ResponseJson.MESSAGE, e.getMessage());
-            return Response.ok().entity(responseJson.toString()).build();
         } catch (AgriException.NullPointerException e) {
             responseJson.put(ResponseJson.ERROR_CODE, ErrorMessages.INTERNAL_SERVER_ERROR.getValue());
             responseJson.put(ResponseJson.MESSAGE, e.getMessage());
-            return Response.ok().entity(responseJson.toString()).build();
         }
+        return Response.ok().entity(responseJson.toString()).build();
     }
 }

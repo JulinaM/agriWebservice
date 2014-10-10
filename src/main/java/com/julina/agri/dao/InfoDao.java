@@ -114,7 +114,7 @@ public class InfoDao {
             AgriException.NullPointerException {
 
 
-        String query = " select * from info as i join infoClient as ic join locationsCrop as lc on lc.tag=ic.tag AND ic.infoId=i.infoId WHERE lc.cropId = ?";
+        String query = " select distinct i.infoTitle, i.infoData, i.infoFrom, i.infoId, UNIX_TIMESTAMP(timestamp) as t from info as i join infoClient as ic join locationsCrop as lc on lc.tag=ic.tag AND ic.infoId=i.infoId WHERE lc.cropId = ?";
         query = String.format(query, tableName);
         mySqlQuery.setQuery(query);
 
@@ -131,7 +131,7 @@ public class InfoDao {
                 infoPojo.setInfoTitle(resultSet.getString("infoTitle"));
                 infoPojo.setInfoData(resultSet.getString("infoData"));
                 infoPojo.setInfoFrom(resultSet.getString("infoFrom"));
-                infoPojo.setTimestamp(resultSet.getDate("timestamp").getTime());
+                infoPojo.setTimestamp(resultSet.getLong("t"));
                 infoPojo.setInfoId(resultSet.getInt("infoId"));
                 infos.add(infoPojo);
             }

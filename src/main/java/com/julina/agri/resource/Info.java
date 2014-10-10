@@ -58,6 +58,7 @@ public class Info {
                 responseJson.put(ResponseJson.MESSAGE, "internal server error 2");
                 return Response.ok().entity(responseJson.toString()).build();
             }
+            infoDao = new InfoDao();
             String[] regId = infoDao.getRegId(tag);
 
             responseJson.put(ResponseJson.ERROR, false);

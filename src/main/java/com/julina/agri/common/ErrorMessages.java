@@ -12,6 +12,7 @@ public enum ErrorMessages {
     CONNECTION_ERROR(6),
     INVALID_EMAIL(7),
     INVALID_DEVICE_ID(8),
+    DB_INSERTION_FAILURE(9);
     ;
 
     private int value;
